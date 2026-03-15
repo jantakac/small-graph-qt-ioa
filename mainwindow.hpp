@@ -6,7 +6,6 @@
 #include <QOpenGLWidget>
 
 #include "graphscene.hpp"
-#include "nodegraphicsitem.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,8 +28,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *m_scene;
-    QList<NodeGraphicsItem *> m_nodePs;
+    GraphScene *m_scene;
+    void showGraph();
 
     void addNode(const QString &nodeName);
 };

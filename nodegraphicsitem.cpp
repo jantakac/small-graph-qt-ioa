@@ -2,29 +2,32 @@
 #include <qfont.h>
 
 NodeGraphicsItem::NodeGraphicsItem(
-    const QString &label, qreal x, qreal y, uint16_t size, QGraphicsItem *parent)
+    const QString &label, int32_t x, int32_t y, uint16_t size, QGraphicsItem *parent)
     : QGraphicsEllipseItem(0, 0, size, size, parent)
-    , m_label(new QGraphicsTextItem{label, this})
-    , m_x(x)
-    , m_y(y)
-    , m_size(size)
+    , m_label{new QGraphicsTextItem{label, this}}
+    , m_size{size}
 {
     setFlags(ItemIsSelectable);
     setBrush(QBrush{Qt::yellow});
     setPen(QPen{Qt::black});
-    setPos(m_x - m_size / 2, m_y - m_size / 2);
-    initLabelPos();
+    changePosOnGrid(x, y);
+    updateLabelPos();
 }
 
-void NodeGraphicsItem::initLabelPos()
+void NodeGraphicsItem::updateLabelPos()
 {
     if (!m_label)
         return;
 
     QFont font = m_label->font();
-    font.setPointSize(m_size / 2);
+    font.setPointSize(m_size / 2.0);
     m_label->setFont(font);
 
-    m_label->setPos(m_size / 2 - m_label->boundingRect().width() / 2,
-                    m_size / 2 - m_label->boundingRect().height() / 2);
+    m_label->setPos(m_size / 2.0 - m_label->boundingRect().width() / 2,
+                    m_size / 2.0 - m_label->boundingRect().height() / 2);
+}
+
+void NodeGraphicsItem::changePosOnGrid(int32_t xGrid, int32_t yGrid)
+{
+    setPos(xGrid - m_size / 2.0, yGrid - m_size / 2.0);
 }

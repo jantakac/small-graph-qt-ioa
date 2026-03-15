@@ -9,15 +9,16 @@ class NodeGraphicsItem : public QGraphicsEllipseItem
 {
 public:
     explicit NodeGraphicsItem(
-        const QString &label, qreal x, qreal y, uint16_t size, QGraphicsItem *parent = nullptr);
+        const QString &label, int32_t x, int32_t y, uint16_t size, QGraphicsItem *parent = nullptr);
+    void changePosOnGrid(int32_t xGrid, int32_t yGrid);
 
 private:
     QGraphicsTextItem *m_label;
-    qreal m_x;
-    qreal m_y;
-    int16_t m_size;
+    qreal m_xAbs;
+    qreal m_yAbs;
+    uint16_t m_size;
 
-    void initLabelPos();
+    void updateLabelPos();
 };
 
 #endif // NODEGRAPHICSITEM_HPP

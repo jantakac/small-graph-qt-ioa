@@ -1,9 +1,58 @@
 #include "graphscene.hpp"
 
-GraphScene::GraphScene(QObject *parent)
+GraphScene::GraphScene(QObject *parent, Graph *backendGraph)
     : QGraphicsScene{parent}
+{
+    if (backendGraph) {
+        setBackendGraph(backendGraph);
+    }
+}
 
-{}
+Graph &GraphScene::backend()
+{
+    return *m_backend;
+}
+
+void GraphScene::setBackendGraph(Graph *backendGraph)
+{
+    if (m_backend == backendGraph)
+        return;
+    if (m_backend) {
+        m_backend->disconnect(this);
+        m_backend->deleteLater();
+    }
+    m_backend = backendGraph;
+    m_backend->setParent(this);
+    connect(m_backend,
+            &Graph::dataChanged,
+            this,
+            &GraphScene::onGraphDataChanged,
+            Qt::UniqueConnection);
+    m_nodes.clear();
+    NodeGraphicsItem *nodeG;
+    for (auto &node : m_backend->nodes()) {
+        nodeG = new NodeGraphicsItem{QString::number(node.id), node.x, node.y, nodeSize};
+        m_nodes.emplace_back(nodeG, &node);
+        addItem(nodeG);
+    }
+}
+
+const QList<std::pair<NodeGraphicsItem *, const Graph::Node *> > &GraphScene::nodes() const
+{
+    return m_nodes;
+}
+
+const QList<std::pair<QLine *, const Graph::Edge *> > &GraphScene::edges() const
+{
+    return m_edges;
+}
+
+void GraphScene::onGraphDataChanged()
+{
+    for (auto [nodeG, node] : std::as_const(m_nodes)) {
+        nodeG->changePosOnGrid(node->x, node->y);
+    }
+}
 
 void GraphScene::drawBackground(QPainter *painter, const QRectF &rect)
 {
