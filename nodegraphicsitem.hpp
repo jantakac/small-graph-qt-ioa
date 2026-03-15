@@ -4,6 +4,7 @@
 #include <QBrush>
 #include <QGraphicsItem>
 #include <QPen>
+#include <qfont.h>
 
 class NodeGraphicsItem : public QGraphicsEllipseItem
 {
@@ -14,8 +15,6 @@ public:
 
 private:
     QGraphicsTextItem *m_label;
-    qreal m_xAbs;
-    qreal m_yAbs;
     uint16_t m_size;
 
     void updateLabelPos();

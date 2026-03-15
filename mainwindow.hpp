@@ -22,15 +22,11 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_btnDraw_clicked();
-
-    void on_btnEdge_clicked();
+    void on_btnRotate_clicked();
+    void on_btnMove_clicked();
 
 private:
     Ui::MainWindow *ui;
     GraphScene *m_scene;
-    void showGraph();
-
-    void addNode(const QString &nodeName);
 };
 #endif // MAINWINDOW_HPP

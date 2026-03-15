@@ -1,6 +1,4 @@
 #include "nodegraphicsitem.hpp"
-#include "graphscene.hpp"
-#include <qfont.h>
 
 NodeGraphicsItem::NodeGraphicsItem(
     const QString &label, int32_t x, int32_t y, uint16_t size, QGraphicsItem *parent)
@@ -9,7 +7,7 @@ NodeGraphicsItem::NodeGraphicsItem(
     , m_size{size}
 {
     setFlags(ItemIsSelectable);
-    setBrush(QBrush{Qt::yellow});
+    setBrush(QBrush{Qt::green});
     setPen(QPen{Qt::black});
     changePosOnGrid(x, y);
     updateLabelPos();

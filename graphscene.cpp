@@ -30,9 +30,34 @@ void GraphScene::setBackendGraph(Graph *backendGraph)
             Qt::UniqueConnection);
     m_nodes.clear();
     NodeGraphicsItem *nodeG;
-    for (auto &node : m_backend->nodes()) {
+    for (const auto &node : m_backend->nodes()) {
         nodeG = new NodeGraphicsItem{QString::number(node.id), node.x, node.y, nodeSize};
-        m_nodes.emplace_back(nodeG, &node);
+        m_nodes.emplaceBack(nodeG, &node);
+    }
+
+    // this is really unoptimized, should be better if kept
+    // in a different datastructure for searching
+
+    const NodeGraphicsItem *fromNodeG;
+    const NodeGraphicsItem *toNodeG;
+    QGraphicsLineItem *edgeG;
+    for (const auto &edge : m_backend->edges()) {
+        for (const auto &[nodeG, node] : std::as_const(m_nodes)) {
+            if (node->id == edge.from)
+                fromNodeG = nodeG;
+            else if (node->id == edge.to)
+                toNodeG = nodeG;
+        }
+        edgeG = new QGraphicsLineItem{fromNodeG->x() + nodeSize / 2.0,
+                                      fromNodeG->y() + nodeSize / 2.0,
+                                      toNodeG->x() + nodeSize / 2.0,
+                                      toNodeG->y() + nodeSize / 2.0};
+        edgeG->setPen(QPen{Qt::black, edgeWidth});
+        m_edges.emplaceBack(edgeG, &edge);
+        addItem(edgeG);
+    }
+
+    for (const auto &[nodeG, node] : std::as_const(m_nodes)) {
         addItem(nodeG);
     }
 }
@@ -42,15 +67,31 @@ const QList<std::pair<NodeGraphicsItem *, const Graph::Node *> > &GraphScene::no
     return m_nodes;
 }
 
-const QList<std::pair<QLine *, const Graph::Edge *> > &GraphScene::edges() const
+const QList<std::pair<QGraphicsLineItem *, const Graph::Edge *> > &GraphScene::edges() const
 {
     return m_edges;
 }
 
 void GraphScene::onGraphDataChanged()
 {
-    for (auto [nodeG, node] : std::as_const(m_nodes)) {
+    for (const auto &[nodeG, node] : std::as_const(m_nodes)) {
         nodeG->changePosOnGrid(node->x, node->y);
+    }
+
+    const NodeGraphicsItem *fromNodeG = nullptr;
+    const NodeGraphicsItem *toNodeG = nullptr;
+    for (const auto &[edgeG, edge] : std::as_const(m_edges)) {
+        for (const auto &[nodeG, node] : std::as_const(m_nodes)) {
+            if (node->id == edge->from)
+                fromNodeG = nodeG;
+            else if (node->id == edge->to)
+                toNodeG = nodeG;
+        }
+        if (fromNodeG && toNodeG)
+            edgeG->setLine(fromNodeG->x() + nodeSize / 2.0,
+                           fromNodeG->y() + nodeSize / 2.0,
+                           toNodeG->x() + nodeSize / 2.0,
+                           toNodeG->y() + nodeSize / 2.0);
     }
 }
 

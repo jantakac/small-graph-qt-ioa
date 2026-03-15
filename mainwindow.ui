@@ -21,16 +21,16 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="btnDraw">
+       <widget class="QPushButton" name="btnRotate">
         <property name="text">
-         <string>Draw</string>
+         <string>Rotate by 90 degrees</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnEdge">
+       <widget class="QPushButton" name="btnMove">
         <property name="text">
-         <string>Edge</string>
+         <string>Move by 10 x and 20 y</string>
         </property>
        </widget>
       </item>
