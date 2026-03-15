@@ -87,10 +87,20 @@ void GraphScene::drawForeground(QPainter *painter, const QRectF &rect)
     int32_t topStart = qFloor(rect.top() / gridSize) * gridSize;
 
     for (int32_t x = leftStart; x <= rect.right(); x += gridSize) {
-        painter->drawText(x + 2, rect.bottom() - 15, 50, 20, Qt::AlignLeft, QString::number(x));
+        painter->drawText(x + 2,
+                          rect.bottom() - 15,
+                          50,
+                          20,
+                          Qt::AlignLeft,
+                          QString::number(x / gridSize * 10));
     }
 
     for (int32_t y = topStart; y <= rect.bottom(); y += gridSize) {
-        painter->drawText(rect.right() - 40, y + 2, 35, 20, Qt::AlignRight, QString::number(y));
+        painter->drawText(rect.right() - 40,
+                          y + 2,
+                          35,
+                          20,
+                          Qt::AlignRight,
+                          QString::number(y / gridSize * -10));
     }
 }

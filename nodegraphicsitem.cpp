@@ -1,4 +1,5 @@
 #include "nodegraphicsitem.hpp"
+#include "graphscene.hpp"
 #include <qfont.h>
 
 NodeGraphicsItem::NodeGraphicsItem(
@@ -29,5 +30,5 @@ void NodeGraphicsItem::updateLabelPos()
 
 void NodeGraphicsItem::changePosOnGrid(int32_t xGrid, int32_t yGrid)
 {
-    setPos(xGrid - m_size / 2.0, yGrid - m_size / 2.0);
+    setPos(xGrid * 5 - m_size / 2.0, yGrid * -5 - m_size / 2.0);
 }

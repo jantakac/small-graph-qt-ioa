@@ -21,12 +21,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btnDraw_clicked()
 {
-    // static uint32_t nodeCounter = 1;
-    // addNode(QString::number(nodeCounter));
-    // ++nodeCounter;
+    m_scene->backend().rotateBy90Degrees();
 }
 
-void MainWindow::on_btnEdge_clicked() {}
+void MainWindow::on_btnEdge_clicked()
+{
+    m_scene->backend().moveBy20X10Y();
+}
 
 void MainWindow::showGraph()
 {
